@@ -19,7 +19,7 @@ line_count = 0
 
 try:
     for lines in sys.stdin:
-        line = lines.rstrip()
+        line = lines.strip()
 
         match = re.match(pattern, line, re.VERBOSE)
 
@@ -36,8 +36,6 @@ try:
                 print("File size:", total_size)
                 for status in sorted(count_status_code):
                     print("{}: {}".format(status, count_status_code[status]))
-
-                count_status_code = defaultdict(int)
 
         else:
             continue
