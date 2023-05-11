@@ -6,7 +6,13 @@ import sys
 import re
 from collections import defaultdict
 
-pattern = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - \[(.*?)\] "GET \/projects\/260 HTTP\/1\.1" (\d{3}) (\d+)'
+pattern = r'''
+^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})
+\s-\s\[(.*?)\]
+\s"GET\s/projects/260\sHTTP/1\.1"
+\s(\d{3})
+\s(\d+)'''
+
 count_status_code = defaultdict(int)
 total_size = 0
 line_count = 0
@@ -15,7 +21,7 @@ try:
     for lines in sys.stdin:
         line = lines.rstrip()
 
-        match = re.match(pattern, line)
+        match = re.match(pattern, line, re.VERBOSE)
 
         if match:
             file_size = int(match.group(4))
