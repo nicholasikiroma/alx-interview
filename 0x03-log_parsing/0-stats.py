@@ -25,10 +25,12 @@ try:
 
         if match:
             file_size = int(match.group(4))
-            status_code = int(match.group(3))
+            status_code = match.group(3)
 
             total_size += file_size
-            count_status_code[status_code] += 1
+
+            if status_code.isdigit():
+                count_status_code[int(status_code)] += 1
 
             line_count += 1
 
