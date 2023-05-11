@@ -36,6 +36,9 @@ try:
                 print("File size:", total_size)
                 for status in sorted(count_status_code):
                     print("{}: {}".format(status, count_status_code[status]))
+
+                count_status_code = defaultdict(int)
+
         else:
             continue
 
