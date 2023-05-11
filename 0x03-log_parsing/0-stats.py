@@ -33,13 +33,13 @@ try:
             line_count += 1
 
             if line_count % 10 == 0:
-                print("Total file size:", total_size)
+                print("File size:", total_size)
                 for status in sorted(count_status_code):
                     print("{}: {}".format(status, count_status_code[status]))
         else:
             continue
 
 except KeyboardInterrupt:
-    print("Total file size:", total_size)
+    print("File size:", total_size)
     for status in sorted(count_status_code):
         print("{}: {}".format(status, count_status_code[status]))
