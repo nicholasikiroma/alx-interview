@@ -2,6 +2,7 @@
 """Module implements nQueens"""
 import sys
 
+
 solutions = []
 board_size = 0
 positions = None
