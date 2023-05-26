@@ -1,80 +1,106 @@
 #!/usr/bin/python3
-"""ALX interview prep"""
 import sys
 
-
-def is_safe(board, row, col, N):
-    """Check if a queen can be placed at the given position
-    without attacking any other queens on the board
-
-    Check the current column on the same row"""
-    for i in range(col):
-        if board[row][i] == "Q":
-            return False
-
-    # Check the upper diagonal
-    i, j = row, col
-    while i >= 0 and j >= 0:
-        if board[i][j] == "Q":
-            return False
-        i -= 1
-        j -= 1
-
-    # Check the lower diagonal
-    i, j = row, col
-    while i < N and j >= 0:
-        if board[i][j] == "Q":
-            return False
-        i += 1
-        j -= 1
-
-    return True
+solutions = []
+board_size = 0
+positions = None
 
 
-def solve_nqueens(N):
-    """Create an empty NxN board"""
-    board = [["." for _ in range(N)] for _ in range(N)]
+def get_board_size():
+    """
+    Retrieves and validates the board size from the command-line argument.
 
-    def backtrack(col):
-        """Base case: All queens have been placed"""
-        if col >= N:
-            # Print the solution
-            for row in range(N):
-                print("".join(board[row]))
-            print()
-            return
-
-        # Try placing a queen in each row of the current column
-        for row in range(N):
-            if is_safe(board, row, col, N):
-                # Place the queen at the current position
-                board[row][col] = "Q"
-
-                # Recursively solve for the next column
-                backtrack(col + 1)
-
-                # Remove the queen from the current position (backtracking)
-                board[row][col] = "."
-
-    # Start solving from the first column (0)
-    backtrack(0)
-
-
-if __name__ == "__main__":
-    # Check the command-line arguments
+    Returns:
+        int: The size of the chessboard.
+    """
+    global board_size
+    board_size = 0
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
-
     try:
-        N = int(sys.argv[1])
-    except ValueError:
+        board_size = int(sys.argv[1])
+    except Exception:
         print("N must be a number")
         sys.exit(1)
-
-    if N < 4:
+    if board_size < 4:
         print("N must be at least 4")
         sys.exit(1)
+    return board_size
 
-    # Solve the N Queens problem
-    solve_nqueens(N)
+
+def is_queen_attacking(position1, position2):
+    """
+    Checks if two queens are attacking each other.
+
+    Args:
+        position1 (tuple): The position of the first queen (row, column).
+        position2 (tuple): The position of the second queen (row, column).
+
+    Returns:
+        bool: True if the queens are attacking each other, False otherwise.
+    """
+    return (
+        position1[0] == position2[0]
+        or position1[1] == position2[1]
+        or abs(position1[0] - position2[0]) == abs(position1[1] - position2[1])
+    )
+
+
+def is_group_existing(group):
+    """
+    Checks if a group of positions already exists in the list of solutions.
+
+    Args:
+        group (list): The group of positions to check.
+
+    Returns:
+        bool: True if the group already exists, False otherwise.
+    """
+    global solutions
+    for solution in solutions:
+        if all(position in solution for position in group):
+            return True
+    return False
+
+
+def build_solution(row, group):
+    """
+    Builds a solution for the N Queens problem recursively.
+
+    Args:
+        row (int): The current row to consider for placing the queen.
+        group (list): The group of positions selected so far.
+    """
+    global solutions, board_size
+    if row == board_size:
+        if not is_group_existing(group):
+            solutions.append(list(group))  # Convert tuple to list
+    else:
+        for col in range(board_size):
+            current_position = (row, col)
+            if not any(
+                is_queen_attacking(current_position, position)
+                for position in group
+            ):
+                group.append(current_position)
+                build_solution(row + 1, group)
+                group.pop()
+
+
+def solve_nqueens():
+    """
+    Solves the N Queens problem and
+    stores the solutions in the `solutions` list.
+    """
+    global positions, board_size
+    positions = [(x // board_size, x % board_size)
+                 for x in range(board_size**2)]
+    build_solution(0, [])
+
+
+if __name__ == "__main__":
+    board_size = get_board_size()
+    solve_nqueens()
+    for solution in solutions:
+        print([list(position) for position in solution])
