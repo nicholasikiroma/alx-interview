@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Module implements nQueens"""
 import sys
 
 solutions = []
