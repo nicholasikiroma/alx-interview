@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
     Module rotates n x n matrix
-    by 90 degrees 
+    by 90 degrees
 """
 
 
