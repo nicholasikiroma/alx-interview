@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+    Module rotates n x n matrix
+    by 90 degrees 
+"""
 
 
 def rotate_2d_matrix(matrix):
